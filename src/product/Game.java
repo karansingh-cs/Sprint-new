@@ -85,7 +85,6 @@ public class Game {
     public void makeMove(int row, int column) {
         if (row >= 0 && row < TOTALROWS && column >= 0 && column < TOTALCOLUMNS
                 && buttons[row][column].getText() == "") {
-
             updateGameState(turn, row, column);
             turn = (turn == "Blue") ? "Red" : "Blue";
         }
@@ -97,7 +96,18 @@ public class Game {
         } else if (isDraw()) {
             currentGameState = GameState.DRAW;
         }
-        // Otherwise, no change to current state (still GameState.PLAYING).
+    }
+
+    public int getNumberOfEmptyCells() {
+        int numberOfEmptyCells = 0;
+        for (int row = 0; row < TOTALROWS; ++row) {
+            for (int col = 0; col < TOTALCOLUMNS; ++col) {
+                if (buttons[row][col].getText() == "") {
+                    numberOfEmptyCells++;
+                }
+            }
+        }
+        return numberOfEmptyCells;
     }
 
     boolean isDraw() {
@@ -112,29 +122,22 @@ public class Game {
     }
 
     static boolean search(JButton[][] buttons, int row, int col, String word) {
-        // System.out.println("Test value: " + buttons[row][col].getText());
-        // System.out.println("ZOME VALUE: " + word.substring(0, 1));
         if (!buttons[row][col].getText().equals(word.substring(0, 1)))
             return false; // If first character of word doesn't match the grid
-
         int len = word.length();
         for (int dir = 0; dir < 8; dir++) { // Search word in all 8 directions
             int k, rd = row + x[dir], cd = col + y[dir]; // Initialize starting point
 
             // First character is already checked, match remaining characters
             for (k = 1; k < len; k++) {
-                // System.out.println("k: " + k);
                 if (rd >= TOTALROWS || rd < 0 || cd >= TOTALCOLUMNS || cd < 0)
                     break; // If index out of bound
 
-                // System.out.println("Substring: " + word.substring(k, k + 1));
                 if (!buttons[rd][cd].getText().equals(word.substring(k, k + 1))) // If word not matched
                     break;
 
                 if (buttons[rd][cd].getText().equals(word.substring(k, k + 1))) {
-                    // buttons[rd][cd].setBackground(Color.CYAN);
                 }
-
                 rd += x[dir]; // Moving in particular direction
                 cd += y[dir];
             }
@@ -145,7 +148,7 @@ public class Game {
         return false;
     }
 
-    // Searches word in a given matrix in all 8 directions
+    // Searches SOS
     boolean hasWon(JButton[][] buttons) {
         for (int row = 0; row < TOTALROWS; row++) {
             for (int col = 0; col < TOTALCOLUMNS; col++) {
@@ -154,7 +157,6 @@ public class Game {
             }
         }
         return false;
-        // system.out.println(hasWon());
     }
 
     public GameState getGameState() {

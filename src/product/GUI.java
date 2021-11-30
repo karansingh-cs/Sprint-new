@@ -37,8 +37,10 @@ public class GUI implements ActionListener {
 
     JRadioButton sgame = new JRadioButton("Simple game");
     JRadioButton ggame = new JRadioButton("General game");
+
     JRadioButton bhuman = new JRadioButton("Human");
     JRadioButton bcomputer = new JRadioButton("Computer");
+
     JRadioButton rhuman = new JRadioButton("Human");
     JRadioButton rcomputer = new JRadioButton("Computer");
 
@@ -123,6 +125,8 @@ public class GUI implements ActionListener {
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
                         new GUI(new Game(game.getTotalRows(), game.getTotalColumns()));
+                        frame.setVisible(false);
+                        frame.dispose();
                     }
                 });
             }
@@ -201,91 +205,227 @@ public class GUI implements ActionListener {
         return generalBtn;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    public void randomBtnSelectorForRed(int randomNum) {
+        if (randomNum == 0) {
+            rO.setSelected(false);
+            rS.setSelected(true);
+        } else {
+            rO.setSelected(true);
+            rS.setSelected(false);
+        }
+    }
 
-        if (game.getGameState() == GameState.PLAYING) {
-            for (int i = 0; i < game.getTotalRows(); i++) {
-                for (int j = 0; j < game.getTotalColumns(); j++) {
+    public void randomBtnSelectorForBlue(int randomNum) {
+        if (randomNum == 0) {
+            bO.setSelected(false);
+            bS.setSelected(true);
+        } else {
+            bO.setSelected(true);
+            bS.setSelected(false);
+        }
+    }
 
-                    if (e.getSource() == buttons[i][j]) {
+    public Boolean isAllCellsFilled() {
+        for (int i = 0; i < game.getTotalRows(); i++) {
+            for (int j = 0; j < game.getTotalColumns(); j++) {
+                if (buttons[i][j].getText().equals("")) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
+    public void makeRandomMove() {
+        int numberOfEmptyCells = game.getNumberOfEmptyCells();
+        Random random = new Random();
+        int so = random.nextInt(2);
+        int targetMove = random.nextInt(numberOfEmptyCells);
+        int index = 0;
+        for (int i = 0; i < game.getTotalRows(); ++i) {
+            for (int j = 0; j < game.getTotalColumns(); ++j) {
+                if (buttons[i][j].getText() == "") {
+                    if (targetMove == index) {
                         if (game.getTurn() == "Blue") {
                             if (buttons[i][j].getText().equals("")) {
+                                randomBtnSelectorForBlue(so);
                                 gameStatusBar.setText("RED");
                                 buttons[i][j].setForeground(Color.BLUE);
-                                // buttons[i][j].setText("S");
                                 buttons[i][j].setText(getLetterSelected(bS, bO).getText());
                                 game.turn = (game.turn == "Blue") ? "Red" : "Blue";
                             }
-                        } else {
-                            if (buttons[i][j].getText() == "") {
+                        } else if (game.getTurn() == "Red") {
+                            if (buttons[i][j].getText().equals("")) {
+                                randomBtnSelectorForRed(so);
                                 gameStatusBar.setText("BLUE");
                                 buttons[i][j].setForeground(Color.RED);
-                                // buttons[i][j].setText("O");
                                 buttons[i][j].setText(getLetterSelected(rS, rO).getText());
                                 game.turn = (game.turn == "Red") ? "Blue" : "Red";
                             }
+
                         }
+                        return;
+                    } else
+                        index++;
+                }
+            }
+        }
+    }
 
-                        if (!buttons[i][j].getText().equals("")) {
+    public void blueRandomMove() {
+        int numberOfEmptyCells = game.getNumberOfEmptyCells();
+        Random random = new Random();
+        int bSO = random.nextInt(2);
+        int targetMove = random.nextInt(numberOfEmptyCells);
+        int index = 0;
+        for (int i = 0; i < game.getTotalRows(); ++i) {
+            for (int j = 0; j < game.getTotalColumns(); ++j) {
+                if (buttons[i][j].getText() == "") {
+                    if (targetMove == index) {
+                        if (game.getTurn() == "Blue") {
+                            if (buttons[i][j].getText().equals("")) {
+                                randomBtnSelectorForBlue(bSO);
+                                gameStatusBar.setText("RED");
+                                buttons[i][j].setForeground(Color.BLUE);
+                                buttons[i][j].setText(getLetterSelected(bS, bO).getText());
+                                game.turn = (game.turn == "Blue") ? "Red" : "Blue";
+                            }
 
-                            gameStatusBar.setText(game.getGameState() + "! Click to play again."); // an empty cell
-                                                                                                   // found,
-                                                                                                   // not draw
                         }
+                        return;
+                    } else
+                        index++;
+                }
+            }
+        }
+    }
 
-                        Boolean hasWon = game.hasWon(buttons);
-
-                        if (hasWon) {
-
-                            if (sgame.isSelected()) {
+    public void redRandomMove() {
+        int numberOfEmptyCells = game.getNumberOfEmptyCells();
+        Random random = new Random();
+        int rSO = random.nextInt(2);
+        int targetMove = random.nextInt(numberOfEmptyCells);
+        int index = 0;
+        for (int i = 0; i < game.getTotalRows(); ++i) {
+            for (int j = 0; j < game.getTotalColumns(); ++j) {
+                if (buttons[i][j].getText() == "") {
+                    if (targetMove == index) {
+                        if (game.getTurn() == "Red") {
+                            if (buttons[i][j].getText().equals("")) {
+                                randomBtnSelectorForRed(rSO);
+                                gameStatusBar.setText("BLUE");
+                                buttons[i][j].setForeground(Color.RED);
+                                buttons[i][j].setText(getLetterSelected(rS, rO).getText());
                                 game.turn = (game.turn == "Red") ? "Blue" : "Red";
-                                game.currentGameState = (game.getTurn() == "Blue") ? GameState.BLUE_WON
-                                        : GameState.RED_WON;
-                                for (int r = 0; r < game.getTotalRows(); r++) {
-                                    for (int c = 0; c < game.getTotalColumns(); c++) {
-                                        buttons[r][c].setEnabled(false);
+                            }
+
+                        }
+                        return;
+                    } else
+                        index++;
+                }
+            }
+        }
+    }
+
+    // int position = random.nextInt(game.getTotalRows() * game.getTotalColumns());
+    // if (buttons[i][j].getText().equals("")) {
+    // buttons[position / game.getTotalRows()][position % game.getTotalColumns()]
+    // .setText(getLetterSelected(rS, rO).getText());
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (game.getGameState() == GameState.PLAYING) {
+            for (int i = 0; i < game.getTotalRows(); i++) {
+                for (int j = 0; j < game.getTotalColumns(); j++) {
+                    if (e.getSource() == buttons[i][j]) {
+
+                        if (bcomputer.isSelected() && rcomputer.isSelected()) {
+                            makeRandomMove();
+                        }
+
+                        if (bhuman.isSelected() && rcomputer.isSelected()) {
+                            if (buttons[i][j].getText() == "") {
+                                if (game.getTurn() == "Blue") {
+                                    if (buttons[i][j].getText().equals("")) {
+                                        gameStatusBar.setText("RED");
+                                        buttons[i][j].setForeground(Color.BLUE);
+                                        buttons[i][j].setText(getLetterSelected(bS, bO).getText());
+                                        game.turn = (game.turn == "Blue") ? "Red" : "Blue";
+                                    }
+                                } else if (game.getTurn() == "Red") {
+                                    redRandomMove();
+                                }
+                            }
+
+                        }
+
+                        if (bcomputer.isSelected() && rhuman.isSelected()) {
+                            if (buttons[i][j].getText() == "") {
+                                if (game.getTurn() == "Blue") {
+                                    blueRandomMove();
+                                } else if (game.getTurn() == "Red") {
+                                    if (buttons[i][j].getText() == "") {
+                                        gameStatusBar.setText("BLUE");
+                                        buttons[i][j].setForeground(Color.RED);
+                                        buttons[i][j].setText(getLetterSelected(rS, rO).getText());
+                                        game.turn = (game.turn == "Red") ? "Blue" : "Red";
                                     }
                                 }
-                                gameStatusBar.setText(game.getGameState() + " Won! Click to play again.");
-                                game.resetGame();
+                            }
 
-                            } else if (ggame.isSelected()) {
+                        }
 
-                                if (hasWon) {
+                        {
+                            Boolean hasWon = game.hasWon(buttons);
+
+                            if (hasWon) {
+
+                                if (sgame.isSelected()) {
+                                    for (int r = 0; r < game.getTotalRows(); r++) {
+                                        for (int c = 0; c < game.getTotalColumns(); c++) {
+                                            buttons[r][c].setEnabled(false);
+                                        }
+                                    }
+                                    gameStatusBar.setText(game.getGameState() + " Won! Click to play again.");
+
+                                } else if (ggame.isSelected()) {
+
                                     if (game.getTurn() == "Blue") {
                                         ++blueCount;
-                                        gameStatusBar.setText(game.getTurn() + "Count : " + blueCount);
+                                        gameStatusBar.setText(game.getTurn() + "Blue Count : " + blueCount);
                                     } else {
-                                        ++redCount;
-                                        gameStatusBar.setText(game.getTurn() + "Count : " + redCount);
-                                    }
-                                }
 
+                                        gameStatusBar.setText(game.getTurn() + "Blue Count : " + blueCount);
+                                    }
+
+                                    if (game.getTurn() == "Red") {
+                                        ++redCount;
+                                        gameStatusBar.setText(game.getTurn() + "Red Count : " + redCount);
+                                    }
+
+                                }
                                 hasWon = false;
 
+                            }
+
+                            // For simple game
+                            if (isAllCellsFilled() && !hasWon) {
+                                gameStatusBar.setText("DRAW! Click to play again."); // an empty cell found
+                            }
+
+                            // For general game
+                            else if (isAllCellsFilled() && !hasWon && (blueCount == redCount)) {
+                                gameStatusBar.setText("DRAW! Click to play again."); // an empty cell found
                             }
 
                         }
 
                     }
+
                 }
             }
         }
-
-        if (game.isDraw()) {
-            // game.currentGameState = GameState.DRAW;
-            gameStatusBar.setText(game.getGameState() + "! Click to play again.");
-            // game.resetGame();
-            // for (int r = 0; r < game.getTotalRows(); r++) {
-            // for (int c = 0; c < game.getTotalColumns(); c++) {
-            // buttons[r][c].setEnabled(false);
-            // }
-            // }
-
-        }
-
     }
 
     public static void main(String[] args) {
