@@ -1,3 +1,8 @@
+fileManager and fileWriter is where I'm trying to see how to record the game 
+
+and at the bottom of GUI.java (right before main function is where I'm thinking of putting the class object function to record)
+
+
 Adding the feature of recording a game into a text file. both record and replay are required
 
 1	A complete simple game of two human players is recorded
@@ -32,3 +37,4 @@ Red      S : buttons[index][index]
 .. 
 
 Blue won / Red won
+
