@@ -2,6 +2,7 @@ package product;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.*;
 import javax.swing.*;
 
@@ -9,7 +10,7 @@ import product.Game.GameState;
 
 public class GUI implements ActionListener {
 
-    public static final int CELL_SIZE = 100;
+    
 
     int blueCount = 0;
     int redCount = 0;
@@ -28,12 +29,15 @@ public class GUI implements ActionListener {
     JButton[][] buttons = new JButton[8][8];
 
     JButton newgame = new JButton("New Game");
+    public static final int CELL_SIZE = 100;
 
     Random random = new Random();
     JRadioButton bS = new JRadioButton("S");
     JRadioButton bO = new JRadioButton("O");
     JRadioButton rS = new JRadioButton("S");
     JRadioButton rO = new JRadioButton("O");
+    
+    JCheckBox check = new JCheckBox("Record");
 
     JRadioButton sgame = new JRadioButton("Simple game");
     JRadioButton ggame = new JRadioButton("General game");
@@ -58,6 +62,7 @@ public class GUI implements ActionListener {
         frame.getContentPane().setBackground(Color.cyan);
         frame.setLayout(new BorderLayout());
         frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
 
         // Game selection buttons
         ButtonGroup selectGame = new ButtonGroup();
@@ -104,6 +109,7 @@ public class GUI implements ActionListener {
         ((AbstractButton) leftside.add(bS)).setHorizontalAlignment(JLabel.CENTER);
         ((AbstractButton) leftside.add(bO)).setHorizontalAlignment(JLabel.CENTER);
         ((AbstractButton) leftside.add(bcomputer)).setHorizontalAlignment(JLabel.CENTER);
+        leftside.add(check);
         leftpanel.add(leftside);
 
         // Red Player side
@@ -139,32 +145,11 @@ public class GUI implements ActionListener {
         gameStatusBar.setForeground(Color.white);
         gameStatusBar.setFont(new Font("Ink Free", Font.BOLD, 30));
         gameStatusBar.setHorizontalAlignment(JLabel.CENTER);
-        gameStatusBar.setText("Curren turn: ");
+        gameStatusBar.setText("Current turn: " + game.getTurn());
         gameStatusBar.setOpaque(true);
         title_panel.setLayout(new BorderLayout());
         title_panel.setBounds(0, 0, 800, 100);
         title_panel.add(gameStatusBar);
-
-        // Adjust the Status Bar
-        {
-            if (game.getGameState() == GameState.PLAYING) {
-                gameStatusBar.setForeground(Color.BLACK);
-                if (game.getTurn() == "Blue") {
-                    gameStatusBar.setText("Blue's Turn");
-                } else {
-                    gameStatusBar.setText("Red's Turn");
-                }
-            } else if (game.getGameState() == GameState.DRAW) {
-                gameStatusBar.setForeground(Color.RED);
-                gameStatusBar.setText("It's a Draw! Click to play again.");
-            } else if (game.getGameState() == GameState.BLUE_WON) {
-                gameStatusBar.setForeground(Color.RED);
-                gameStatusBar.setText("Blue Won! Click to play again.");
-            } else if (game.getGameState() == GameState.RED_WON) {
-                gameStatusBar.setForeground(Color.RED);
-                gameStatusBar.setText("Red Won! Click to play again.");
-            }
-        }
 
         // Grid-panel
         button_panel.setLayout(new GridLayout(game.getTotalRows(), game.getTotalColumns()));
@@ -247,20 +232,26 @@ public class GUI implements ActionListener {
                 if (buttons[i][j].getText() == "") {
                     if (targetMove == index) {
                         if (game.getTurn() == "Blue") {
-                            if (buttons[i][j].getText().equals("")) {
-                                randomBtnSelectorForBlue(so);
-                                gameStatusBar.setText("RED");
-                                buttons[i][j].setForeground(Color.BLUE);
-                                buttons[i][j].setText(getLetterSelected(bS, bO).getText());
-                                game.turn = (game.turn == "Blue") ? "Red" : "Blue";
+                            while (buttons[i][j].getText().equals("")) {
+                                if (buttons[i][j].getText().equals("")) {
+                                    randomBtnSelectorForBlue(so);
+                                    gameStatusBar.setText("RED");
+                                    buttons[i][j].setForeground(Color.BLUE);
+                                    buttons[i][j].setText(getLetterSelected(bS, bO).getText());
+                                    game.turn = (game.turn == "Blue") ? "Red" : "Blue";
+                                    break;
+                                }
                             }
                         } else if (game.getTurn() == "Red") {
-                            if (buttons[i][j].getText().equals("")) {
-                                randomBtnSelectorForRed(so);
-                                gameStatusBar.setText("BLUE");
-                                buttons[i][j].setForeground(Color.RED);
-                                buttons[i][j].setText(getLetterSelected(rS, rO).getText());
-                                game.turn = (game.turn == "Red") ? "Blue" : "Red";
+                            while (buttons[i][j].getText().equals("")) {
+                                if (buttons[i][j].getText().equals("")) {
+                                    randomBtnSelectorForRed(so);
+                                    gameStatusBar.setText("BLUE");
+                                    buttons[i][j].setForeground(Color.RED);
+                                    buttons[i][j].setText(getLetterSelected(rS, rO).getText());
+                                    game.turn = (game.turn == "Red") ? "Blue" : "Red";
+                                    break;
+                                }
                             }
 
                         }
@@ -271,6 +262,7 @@ public class GUI implements ActionListener {
             }
         }
     }
+    
 
     public void blueRandomMove() {
         int numberOfEmptyCells = game.getNumberOfEmptyCells();
@@ -299,6 +291,7 @@ public class GUI implements ActionListener {
             }
         }
     }
+    
 
     public void redRandomMove() {
         int numberOfEmptyCells = game.getNumberOfEmptyCells();
@@ -327,12 +320,49 @@ public class GUI implements ActionListener {
             }
         }
     }
+    
+    
+    
+    public void blueMove() {
+    	for (int i = 0; i < game.getTotalRows(); i++) {
+    	    for (int j = 0; j < game.getTotalColumns(); j++) {
+    	                if (buttons[i][j].getText() == "") {
+    	                    if (game.getTurn() == "Blue") {
+    	                        if (buttons[i][j].getText().equals("")) {
+    	                            gameStatusBar.setText("RED");
+    	                            buttons[i][j].setForeground(Color.BLUE);
+    	                            buttons[i][j].setText(getLetterSelected(bS, bO).getText());
+    	                            game.turn = (game.turn == "Blue") ? "Red" : "Blue";
+    	                        }
+    	                    }
+    	                }
+    	            
 
-    // int position = random.nextInt(game.getTotalRows() * game.getTotalColumns());
-    // if (buttons[i][j].getText().equals("")) {
-    // buttons[position / game.getTotalRows()][position % game.getTotalColumns()]
-    // .setText(getLetterSelected(rS, rO).getText());
+    	     }
+    	}
+    }
+    
+    
+    public void redMove() {
+    	for (int i = 0; i < game.getTotalRows(); i++) {
+    	    for (int j = 0; j < game.getTotalColumns(); j++) {
+    	                if (buttons[i][j].getText() == "") {
+    	                    	if (game.getTurn() == "Red") {
+    	                            if (buttons[i][j].getText() == "") {
+    	                                gameStatusBar.setText("BLUE");
+    	                                buttons[i][j].setForeground(Color.RED);
+    	                                buttons[i][j].setText(getLetterSelected(rS, rO).getText());
+    	                                game.turn = (game.turn == "Red") ? "Blue" : "Red";
+    	                            }
+    	                        }
+    	                  }
+    	          
+    	      }
 
+    	 }
+    }
+    
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         if (game.getGameState() == GameState.PLAYING) {
@@ -340,11 +370,31 @@ public class GUI implements ActionListener {
                 for (int j = 0; j < game.getTotalColumns(); j++) {
                     if (e.getSource() == buttons[i][j]) {
 
-                        if (bcomputer.isSelected() && rcomputer.isSelected()) {
+                        if (bcomputer.isSelected() && rcomputer.isSelected()) { // Blue Computer and Red Computer
                             makeRandomMove();
                         }
 
-                        if (bhuman.isSelected() && rcomputer.isSelected()) {
+                        if (bhuman.isSelected() && rhuman.isSelected()) { // Blue Human and Red Human
+                            if (buttons[i][j].getText() == "") {
+                                if (game.getTurn() == "Blue") {
+                                    if (buttons[i][j].getText().equals("")) {
+                                        gameStatusBar.setText("RED");
+                                        buttons[i][j].setForeground(Color.BLUE);
+                                        buttons[i][j].setText(getLetterSelected(bS, bO).getText());
+                                        game.turn = (game.turn == "Blue") ? "Red" : "Blue";
+                                    }
+                                } else if (game.getTurn() == "Red") {
+                                    if (buttons[i][j].getText() == "") {
+                                        gameStatusBar.setText("BLUE");
+                                        buttons[i][j].setForeground(Color.RED);
+                                        buttons[i][j].setText(getLetterSelected(rS, rO).getText());
+                                        game.turn = (game.turn == "Red") ? "Blue" : "Red";
+                                    }
+                                }
+                            }
+                        }
+
+                        if (bhuman.isSelected() && rcomputer.isSelected()) { // Blue Human and Red Computer
                             if (buttons[i][j].getText() == "") {
                                 if (game.getTurn() == "Blue") {
                                     if (buttons[i][j].getText().equals("")) {
@@ -360,7 +410,7 @@ public class GUI implements ActionListener {
 
                         }
 
-                        if (bcomputer.isSelected() && rhuman.isSelected()) {
+                        if (bcomputer.isSelected() && rhuman.isSelected()) { // Blue Computer and Red Human
                             if (buttons[i][j].getText() == "") {
                                 if (game.getTurn() == "Blue") {
                                     blueRandomMove();
@@ -373,51 +423,56 @@ public class GUI implements ActionListener {
                                     }
                                 }
                             }
-
                         }
 
                         {
                             Boolean hasWon = game.hasWon(buttons);
 
                             if (hasWon) {
-
                                 if (sgame.isSelected()) {
                                     for (int r = 0; r < game.getTotalRows(); r++) {
                                         for (int c = 0; c < game.getTotalColumns(); c++) {
                                             buttons[r][c].setEnabled(false);
                                         }
                                     }
-                                    gameStatusBar.setText(game.getGameState() + " Won! Click to play again.");
-
-                                } else if (ggame.isSelected()) {
-
-                                    if (game.getTurn() == "Blue") {
-                                        ++blueCount;
-                                        gameStatusBar.setText(game.getTurn() + "Blue Count : " + blueCount);
-                                    } else {
-
-                                        gameStatusBar.setText(game.getTurn() + "Blue Count : " + blueCount);
-                                    }
-
-                                    if (game.getTurn() == "Red") {
-                                        ++redCount;
-                                        gameStatusBar.setText(game.getTurn() + "Red Count : " + redCount);
-                                    }
-
+                                    game.turn = (game.turn == "Blue") ? "Red" : "Blue";
+                                    gameStatusBar.setBackground(Color.RED);
+                                    gameStatusBar.setText(game.getTurn() + " Won! Click to play again.");
                                 }
-                                hasWon = false;
-
                             }
 
-                            // For simple game
+                            if (game.hasWon(buttons)) {
+                                if (ggame.isSelected()) {
+                                    if (game.getTurn() == "Blue") {
+                                        ++redCount;
+                                        gameStatusBar.setText("Red Count : " + redCount);
+                                        gameStatusBar.setBackground(Color.GRAY);
+                                       
+                                    } else if (game.getTurn() == "Red") {
+                                        ++blueCount;
+                                        gameStatusBar.setText("Blue Count : " + blueCount);
+                                        gameStatusBar.setBackground(Color.GRAY);
+
+                                    }
+                                }
+
+                            }
+                            
                             if (isAllCellsFilled() && !hasWon) {
-                                gameStatusBar.setText("DRAW! Click to play again."); // an empty cell found
+                            	gameStatusBar.setBackground(Color.RED);
+                                //gameStatusBar.setText("DRAW!"); // an empty cell found
                             }
-
-                            // For general game
-                            else if (isAllCellsFilled() && !hasWon && (blueCount == redCount)) {
-                                gameStatusBar.setText("DRAW! Click to play again."); // an empty cell found
-                            }
+                            
+                            if (isAllCellsFilled() && hasWon){
+                                if (blueCount > redCount) {
+                                	gameStatusBar.setBackground(Color.RED);
+                                    gameStatusBar.setText("Blue Won"); 
+                                } else if (blueCount < redCount) {
+                                	gameStatusBar.setBackground(Color.RED);
+                                    gameStatusBar.setText("RED won"); 
+                                }
+ 
+                           }
 
                         }
 
@@ -427,12 +482,37 @@ public class GUI implements ActionListener {
             }
         }
     }
-
+    
+    public class write {
+    	
+    	fileWriter writer = new fileWriter();
+    	file.write("Blue Move:\n" + " " + GUI.buttons[i][j]);
+        file.write("Red Score:\n" );
+    }
+    
+    
+//    public class write {
+//
+//        public static void main(String[] args) {
+//            FileManager manager = new FileManager();
+//            String fileName = "Game_record.txt";
+//
+//            manager.saveWins(fileName, Game.TOTALCOLUMNS + Game.TOTALROWS);
+//            System.out.println(manager.getWins(fileName));
+//        }
+//    }
+    
+    
+    
+    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 new GUI(new Game());
             }
         });
+        
+        
     }
+    
 }
