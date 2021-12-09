@@ -23,9 +23,9 @@ public class GameFileManager {
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
                             if (button.isSelected()) {
-                                logAction(button.getName() + " - " + button.getText() + " was selected");
+                                logAction(button.getName() + " was selected");
                             } else {
-                                logAction(button.getName() + " - " + button.getText() + " was unselected");
+                                logAction(button.getName() + " was unselected");
                             }
                         }
                     });

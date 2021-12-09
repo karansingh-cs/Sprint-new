@@ -53,6 +53,20 @@ public class GUI implements ActionListener {
         this(new Game());
     }
 
+    private void setNamesOfButtons() {
+        bS.setName("BS");
+        bO.setName("BO");
+        rS.setName("RS");
+        rO.setName("RO");
+        sgame.setName("SimpleGame");
+        ggame.setName("GeneralGame");
+        bhuman.setName("BHuman");
+        bcomputer.setName("BComputer");
+        rhuman.setName("RHuman");
+        rcomputer.setName("RComputer");
+
+    }
+
     public GUI(Game game) {
 
         this.game = game;
@@ -173,6 +187,8 @@ public class GUI implements ActionListener {
 
             }
         }
+
+        setNamesOfButtons();
 
         List<JRadioButton> buttonList = new ArrayList<JRadioButton>();
         buttonList.add(bS);
