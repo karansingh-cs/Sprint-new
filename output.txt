@@ -1,2 +1,23 @@
 Blue
 Red Score:
+SimpleGame was selected
+BHuman was selected
+RHuman was selected
+S in row:column 1:1 is placed
+S in row:column 2:2 is placed
+S in row:column 3:2 is placed
+O in row:column 4:3 is placed
+S in row:column 5:4 is placed
+SimpleGame was selected
+BHuman was selected
+RHuman was selected
+S in row:column 5:5 is placed
+O in row:column 4:4 is placed
+S in row:column 3:3 is placed
+SimpleGame was selected
+BHuman was selected
+RHuman was selected
+S in row:column 1:1 is placed
+O in row:column 2:2 is placed
+S in row:column 3:3 is placed
+Blue Won!

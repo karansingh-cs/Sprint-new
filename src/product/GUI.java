@@ -468,6 +468,8 @@ public class GUI implements ActionListener {
                                     game.turn = (game.turn == "Blue") ? "Red" : "Blue";
                                     gameStatusBar.setBackground(Color.RED);
                                     gameStatusBar.setText(game.getTurn() + " Won! Click to play again.");
+                                    GameFileManager.logAction(game.getTurn() + " Won!");
+                                    
                                 }
                             }
 
