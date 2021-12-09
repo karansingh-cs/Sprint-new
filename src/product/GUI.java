@@ -31,10 +31,10 @@ public class GUI implements ActionListener {
     public static final int CELL_SIZE = 100;
 
     Random random = new Random();
-    JRadioButton bS = new JRadioButton("BS");
-    JRadioButton bO = new JRadioButton("BO");
-    JRadioButton rS = new JRadioButton("RS");
-    JRadioButton rO = new JRadioButton("RO");
+    JRadioButton bS = new JRadioButton("S");
+    JRadioButton bO = new JRadioButton("O");
+    JRadioButton rS = new JRadioButton("S");
+    JRadioButton rO = new JRadioButton("O");
     
     JCheckBox check = new JCheckBox("Record");
 
