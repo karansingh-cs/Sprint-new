@@ -397,7 +397,7 @@ public class GUI implements ActionListener {
             for (int i = 0; i < game.getTotalRows(); i++) {
                 for (int j = 0; j < game.getTotalColumns(); j++) {
                     if (e.getSource() == buttons[i][j]) {
-
+                        
                         if (bcomputer.isSelected() && rcomputer.isSelected()) { // Blue Computer and Red Computer
                             makeRandomMove();
                         }
@@ -409,6 +409,7 @@ public class GUI implements ActionListener {
                                         gameStatusBar.setText("RED");
                                         buttons[i][j].setForeground(Color.BLUE);
                                         buttons[i][j].setText(getLetterSelected(bS, bO).getText());
+                                        GameFileManager.logAction(getLetterSelected(bS, bO).getText() + " in row:column " + i + ":" + j + " is placed");
                                         game.turn = (game.turn == "Blue") ? "Red" : "Blue";
                                     }
                                 } else if (game.getTurn() == "Red") {
@@ -416,6 +417,7 @@ public class GUI implements ActionListener {
                                         gameStatusBar.setText("BLUE");
                                         buttons[i][j].setForeground(Color.RED);
                                         buttons[i][j].setText(getLetterSelected(rS, rO).getText());
+                                        GameFileManager.logAction(getLetterSelected(rS, rO).getText() + " in row:column " + i + ":" + j + " is placed");
                                         game.turn = (game.turn == "Red") ? "Blue" : "Red";
                                     }
                                 }

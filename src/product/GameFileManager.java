@@ -22,10 +22,12 @@ public class GameFileManager {
                 public void actionPerformed(ActionEvent e) {
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
-                            if (button.isSelected()) {
-                                logAction(button.getName() + " was selected");
-                            } else {
-                                logAction(button.getName() + " was unselected");
+                            if (button.getText() != "S" && button.getText() != "O") {
+                                if (button.isSelected()) {
+                                    logAction(button.getName() + " was selected");
+                                } else {
+                                    logAction(button.getName() + " was unselected");
+                                }
                             }
                         }
                     });
