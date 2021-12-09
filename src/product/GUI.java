@@ -5,8 +5,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
-
-import product.Game.GameState;
+import java.util.List;
 
 public class GUI implements ActionListener {
 
@@ -32,10 +31,10 @@ public class GUI implements ActionListener {
     public static final int CELL_SIZE = 100;
 
     Random random = new Random();
-    JRadioButton bS = new JRadioButton("S");
-    JRadioButton bO = new JRadioButton("O");
-    JRadioButton rS = new JRadioButton("S");
-    JRadioButton rO = new JRadioButton("O");
+    JRadioButton bS = new JRadioButton("BS");
+    JRadioButton bO = new JRadioButton("BO");
+    JRadioButton rS = new JRadioButton("RS");
+    JRadioButton rO = new JRadioButton("RO");
     
     JCheckBox check = new JCheckBox("Record");
 
@@ -174,6 +173,19 @@ public class GUI implements ActionListener {
 
             }
         }
+
+        List<JRadioButton> buttonList = new ArrayList<JRadioButton>();
+        buttonList.add(bS);
+        buttonList.add(bO);
+        buttonList.add(rS);
+        buttonList.add(rO);
+        buttonList.add(sgame);
+        buttonList.add(ggame);
+        buttonList.add(bhuman);
+        buttonList.add(bcomputer);
+        buttonList.add(rhuman);
+        buttonList.add(rcomputer);
+        GameFileManager.setActionListenerToButtons(buttonList);
     }
 
     public JRadioButton getLetterSelected(JRadioButton sBtn, JRadioButton oBtn) {
@@ -365,7 +377,7 @@ public class GUI implements ActionListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (game.getGameState() == GameState.PLAYING) {
+        if (game.getGameState() == Game.GameState.PLAYING) {
             for (int i = 0; i < game.getTotalRows(); i++) {
                 for (int j = 0; j < game.getTotalColumns(); j++) {
                     if (e.getSource() == buttons[i][j]) {
@@ -482,25 +494,6 @@ public class GUI implements ActionListener {
             }
         }
     }
-    
-    public class write {
-    	
-    	fileWriter writer = new fileWriter();
-    	file.write("Blue Move:\n" + " " + GUI.buttons[i][j]);
-        file.write("Red Score:\n" );
-    }
-    
-    
-//    public class write {
-//
-//        public static void main(String[] args) {
-//            FileManager manager = new FileManager();
-//            String fileName = "Game_record.txt";
-//
-//            manager.saveWins(fileName, Game.TOTALCOLUMNS + Game.TOTALROWS);
-//            System.out.println(manager.getWins(fileName));
-//        }
-//    }
     
     
     
